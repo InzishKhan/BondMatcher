@@ -29,18 +29,21 @@ def scrape_latest_bond_draws(bond_type):
             page = browser.new_page()
             logger.info("New page created")
 
-            page.goto("https://savings.gov.pk", wait_until="domcontentloaded")
-            logger.info("Navigated to savings.gov.pk")
+            #page.goto("https://savings.gov.pk", wait_until="domcontentloaded")
+            #logger.info("Navigated to savings.gov.pk")
 
-            page.get_by_role("link", name="Download Draws").click()
-            logger.info("Clicked 'Download Draws---'")
-            page.goto(page.url, wait_until="domcontentloaded")
+            #page.get_by_role("link", name="Download Draws").click()
+            #logger.info("Clicked 'Download Draws---'")
+            #page.goto(page.url, wait_until="domcontentloaded")
 
             # Click correct bond category
-            page.get_by_role("link", name=f"Rs. {bond_type} Prize Bond Draw List").click()
+            #page.get_by_role("link", name=f"Rs. {bond_type} Prize Bond Draw List").click()
             
-            page.goto(page.url, wait_until="domcontentloaded")
-            logger.info(f"Before clicking the 'a' element, current URL: {page.url}")
+            #page.goto(page.url, wait_until="domcontentloaded")
+            #logger.info(f"Before clicking the 'a' element, current URL: {page.url}")
+            # Trying the FASTER APPROACH 
+            page.goto(f"https://savings.gov.pk/rs-{bond_type}-prize-bond-draw/", wait_until="domcontentloaded")
+            logger.info("Navigated to Direct URL for bond type")
 
             date_elements = page.locator("a").all()
             logger.info(f"Found {len(date_elements)} elements")

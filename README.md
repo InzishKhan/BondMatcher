@@ -68,3 +68,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## running the backend with FastAPI
+### ./playwright/Scripts/activate
+## PS D:\gitFiles\BondMatcher\playwright\Scripts>
+### python app.py
+The app will start on http://localhost:5000
+

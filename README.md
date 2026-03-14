@@ -73,5 +73,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### ./playwright/Scripts/activate
 ## PS D:\gitFiles\BondMatcher\playwright\Scripts>
 ### python app.py
-The app will start on http://localhost:5000
+###The app will start on http://localhost:5000
+### pip install -r requirements.txt - if the virtual enviornment gets removed by any chance
 

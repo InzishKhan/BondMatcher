@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 def scrape_latest_bond_draws(bond_type):
     logger.info(f"scrape_latest_bond_draws called with bond_type: {bond_type}")
-   
+
     def parse_draw_date(text):
         try:
             return datetime.strptime(text, "%d-%m-%Y")
@@ -48,30 +48,43 @@ def scrape_latest_bond_draws(bond_type):
             date_elements = page.locator("a").all()
             logger.info(f"Found {len(date_elements)} elements")
 
-            dates = []
+            # Collect all valid draw dates we can find on the page
+            all_datetimes = []
             for element in date_elements:
                 text = element.inner_text().strip()
                 if "-" in text and len(text) == 10:
                     dt = parse_draw_date(text)
                     if dt:
-                        dates.append(text)
+                        all_datetimes.append(dt)
 
-            logger.info(f"Extracted {len(dates)} dates")
-            #just for now i want to check for 2025 since there is none for 2026
-            #current_year = datetime.now().year
-            current_year = 2025
-            current_year_datetimes = []
-            for d in dates:
-                dt = parse_draw_date(d)
-                if dt and dt.year == current_year:
-                    current_year_datetimes.append(dt)
+            if not all_datetimes:
+                raise RuntimeError("No valid draw dates found on Savings site")
 
-            unique_sorted = sorted(set(current_year_datetimes), reverse=True)
-            current_year_dates = [dt.strftime("%d-%m-%Y") for dt in unique_sorted]
-            logger.info(f"Current year dates: {current_year_dates[:3]}")  # Log first 3
+            logger.info(f"Extracted {len(all_datetimes)} possible draw dates")
 
-            page.get_by_role("link", name=current_year_dates[0]).click()
-            logger.info(f"Clicked latest date: {current_year_dates[0]}")
+            # Prefer the latest draw from the *current* year, but if there isn't one yet,
+            # automatically fall back to the latest draw from previous years.
+            now = datetime.now()
+            current_year = now.year
+
+            current_year_datetimes = [dt for dt in all_datetimes if dt.year == current_year]
+
+            if current_year_datetimes:
+                chosen_dt = max(current_year_datetimes)
+                is_fallback = False
+                logger.info(f"Using latest draw in current year {current_year}: {chosen_dt}")
+            else:
+                chosen_dt = max(all_datetimes)
+                is_fallback = True
+                logger.info(
+                    f"No draws found for current year {current_year}. "
+                    f"Falling back to latest available draw: {chosen_dt}"
+                )
+
+            chosen_label = chosen_dt.strftime("%d-%m-%Y")
+
+            page.get_by_role("link", name=chosen_label).click()
+            logger.info(f"Clicked latest date link: {chosen_label}")
             page.goto(page.url, wait_until="domcontentloaded")
 
             result_url = page.url
@@ -120,8 +133,20 @@ def scrape_latest_bond_draws(bond_type):
                 if numbers:
                     data[current_section].extend(numbers)
 
-        logger.info(f"Extracted prizes - First: {len(data['first_prize'])}, Second: {len(data['second_prize'])}, Third: {len(data['third_prize'])}")
-        return data
+        logger.info(
+            f"Extracted prizes - First: {len(data['first_prize'])}, "
+            f"Second: {len(data['second_prize'])}, Third: {len(data['third_prize'])}"
+        )
+
+        meta = {
+            "draw_date": chosen_label,
+            "draw_year": chosen_dt.year,
+            "is_fallback": is_fallback,
+        }
+        logger.info(f"Draw meta: {meta}")
+
+        # Return both prize data and metadata about which draw was used
+        return data, meta
     
     except Exception as e:
         logger.exception(f"Error in get_latest_draw_results: {str(e)}")

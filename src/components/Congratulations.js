@@ -25,12 +25,32 @@ const Congratulations = ({ isWin, bondNumber, prize, onReset }) => {
       {isWin ? (
         <div>
           <h1>Congratulations, You have Won!</h1>
-          </div>
+        </div>
       ) : (
-        <div>
-          <h1>Better luck next time</h1>
-          <p>😭</p>
-          </div>
+        <div
+          style={{
+            marginTop: '1.5rem',
+            textAlign: 'center',
+          }}
+        >
+          <h1
+            style={{
+              fontSize: '2.3rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              marginBottom: '0.5rem',
+              color: '#b91c1c',
+              textTransform: 'uppercase',
+            }}
+          >
+            Better luck next time
+          </h1>
+          <p style={{ fontSize: '1.6rem', marginBottom: '0.4rem' }}>😔</p>
+          <p style={{ fontSize: '0.98rem', color: '#4b5563' }}>
+            None of your bonds matched in this draw. Keep your bonds safe and try again on the next
+            official result day.
+          </p>
+        </div>
       )}
     </div>
   );

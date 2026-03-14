@@ -6,7 +6,7 @@ function ResultsPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state || {};
-  const { results = [], totalMatches = 0, bondType } = state;
+  const { results = [], totalMatches = 0, bondType, drawMeta } = state;
 
   const hasResults = results && results.length > 0;
 
@@ -44,6 +44,22 @@ function ResultsPage() {
               : null}
           </div>
         </div>
+
+        {drawMeta && (
+          <div style={{ marginBottom: '1.2rem', fontSize: '0.85rem', color: '#6b7280' }}>
+            <span>
+              Showing results for the latest available draw on{' '}
+              <strong>{drawMeta.draw_date}</strong>.
+            </span>
+            {drawMeta.is_fallback && (
+              <span>
+                {' '}
+                The current year does not have a published draw yet, so we used the most recent
+                previous draw automatically.
+              </span>
+            )}
+          </div>
+        )}
 
         {hasResults ? (
           <div className="bm-results-grid">

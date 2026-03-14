@@ -94,6 +94,7 @@ function Home() {
               results: data.matches,
               totalMatches: data.totalMatches,
               bondType: bondName,
+              drawMeta: data.drawMeta || null,
             },
           });
         }
@@ -287,9 +288,25 @@ function Home() {
           )}
 
           {hasCheckedNoResults && (
-            <div className="bm-results-empty">
-              No winning bonds found this draw. Double-check your bond category and file,
-              or try again on the next draw.
+            <div
+              className="bm-results-empty"
+              style={{
+                fontSize: '1.05rem',
+                fontWeight: 600,
+                color: 'red',
+              }}
+            >
+              No winning bonds matched in this draw.
+              <span
+                style={{
+                  display: 'block',
+                  fontSize: '0.9rem',
+                  fontWeight: 400,
+                  marginTop: '0.25rem',
+                }}
+              >
+                Keep your bonds safe and check again on the next official result day.
+              </span>
             </div>
           )}
         </div>

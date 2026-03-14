@@ -30,20 +30,22 @@ MAX_FILE_SIZE = 16 * 1024 * 1024  # 16MB max file size
 def process_bond_file(file_content, bond_type):
     """
     Match user bonds against latest draw results.
-    
+
     Args:
         file_content: Content of uploaded file with bond numbers
         bond_type: Selected bond type
-    
+
     Returns:
-        List of matching bonds with prize info
+        Dict with:
+          - matches: List of matching bonds with prize info
+          - draw_meta: Information about which draw was used
     """
     logger.info(f"📋 Processing bond file for bond_type: {bond_type}")
 
     # Get latest draw results from scraper
-    logger.info(f"🔍 Scraping latest draw results...")
-    data = scrape_latest_bond_draws(bond_type)
-    logger.info(f"✓ Got latest draw results")
+    logger.info("🔍 Scraping latest draw results...")
+    data, draw_meta = scrape_latest_bond_draws(bond_type)
+    logger.info(f"✓ Got latest draw results from draw_date={draw_meta.get('draw_date')}")
 
     # Extract user bonds from file
     user_bonds = {line.strip() for line in file_content.splitlines() if line.strip()}
@@ -72,7 +74,7 @@ def process_bond_file(file_content, bond_type):
             logger.info(f"🎉 MATCH: {bond} - Third Prize!")
 
     logger.info(f"✅ Matching complete. Found {len(matches)} winning bonds!")
-    return matches
+    return {"matches": matches, "draw_meta": draw_meta}
 
 
 @app.post('/api/upload')
@@ -104,8 +106,17 @@ async def upload_file(file: UploadFile = File(...), bondType: str = Form(...)):
         
         # Process the file with Playwright script (runs in thread pool)
         logger.info(f"Starting bond matching process for bondType: {bondType}")
-        matched_bonds = await asyncio.get_event_loop().run_in_executor(None, partial(process_bond_file, file_content, bondType))
-        logger.info(f"Bond matching complete. Matches found: {len(matched_bonds)}")
+        result = await asyncio.get_event_loop().run_in_executor(
+            None, partial(process_bond_file, file_content, bondType)
+        )
+        matched_bonds = result["matches"]
+        draw_meta = result["draw_meta"]
+        logger.info(
+            "Bond matching complete. Matches found: %s, draw_date=%s, is_fallback=%s",
+            len(matched_bonds),
+            draw_meta.get("draw_date"),
+            draw_meta.get("is_fallback"),
+        )
         
         # Clean up the uploaded file
         os.remove(filepath)
@@ -117,7 +128,11 @@ async def upload_file(file: UploadFile = File(...), bondType: str = Form(...)):
             'bondCategory': bondType,
             'matches': matched_bonds,
             'totalMatches': len(matched_bonds),
-            'message': f'File processed successfully for {bondType} bond category'
+            'drawMeta': draw_meta,
+            'message': (
+                f"File processed successfully for {bondType} bond category. "
+                f"Draw date: {draw_meta.get('draw_date')}"
+            )
         }
     
     except Exception as e:

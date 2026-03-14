@@ -24,17 +24,13 @@ const Congratulations = ({ isWin, bondNumber, prize, onReset }) => {
       )}
       {isWin ? (
         <div>
-          <h1>Congratulations, You have Won</h1>
-          <p>Bond Number: {bondNumber}</p>
-          <p>Prize: {prize}</p>
-          <button onClick={onReset} style={{ padding: '10px 20px', marginTop: '20px' }}>Try Again</button>
-        </div>
+          <h1>Congratulations, You have Won!</h1>
+          </div>
       ) : (
         <div>
           <h1>Better luck next time</h1>
           <p>😭</p>
-          <button onClick={onReset} style={{ padding: '10px 20px', marginTop: '20px' }}>Try Again</button>
-        </div>
+          </div>
       )}
     </div>
   );

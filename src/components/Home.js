@@ -11,6 +11,7 @@ function Home() {
   const [error, setError] = useState(null);
   const [totalMatches, setTotalMatches] = useState(0);
   const [isDragActive, setIsDragActive] = useReactStateAlias(false);
+  const [isFormHovered, setIsFormHovered] = useState(false);
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -151,20 +152,49 @@ function Home() {
           </div>
         </div>
 
-        <div className="bm-hero-card">
-          <div className="bm-hero-card-header">
-            <div className="bm-hero-card-title">Next draw check</div>
-            <span className="bm-hero-card-tag">Latest official results</span>
-          </div>
-          <p className="bm-hero-subtext" style={{ fontSize: '0.85rem', marginBottom: '0.5rem' }}>
-            Start from here or use the full tool below.
-          </p>
+        <div
+          style={{
+            marginLeft: '2.5rem',
+          }}
+        >
+          <video
+            src="/main_page.mp4"
+            controls
+            style={{
+              width: '100%',
+              maxWidth: '800px',
+              borderRadius: '0.75rem',
+              boxShadow: '0 10px 30px rgba(15, 23, 42, 0.18)',
+              display: 'block',
+              border: '3px solid #000',
+            }}
+          />
         </div>
       </section>
 
       {/* Main tool */}
-      <section id="bondmatch-tool" className="bm-tool-card">
-        <form onSubmit={handleSubmit}>
+      <section
+        id="bondmatch-tool"
+        className="bm-tool-card"
+        style={{ marginTop: '3.5rem' }}
+      >
+        <div
+          onMouseEnter={() => setIsFormHovered(true)}
+          onMouseLeave={() => setIsFormHovered(false)}
+          style={{
+            borderRadius: '1.25rem',
+            padding: '2.25rem 2.4rem',
+            background:
+              'radial-gradient(circle at top left, rgba(137, 182, 255, 0.13), transparent 55%), radial-gradient(circle at bottom right, rgba(16,185,129,0.16), transparent 55%),rgb(42, 137, 201)',
+            boxShadow: isFormHovered
+              ? '0 24px 50px rgba(60, 79, 123, 0.8)'
+              : '0 18px 38px rgba(97, 131, 212, 0.65)',
+            transform: isFormHovered ? 'translateY(-4px) scale(1.01)' : 'translateY(0) scale(1)',
+            transition: 'transform 220ms ease, box-shadow 220ms ease',
+            border: '1px solid rgba(148, 163, 184, 0.55)',
+          }}
+        >
+        <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
           <div className="bm-field-group">
             <label className="bm-label" htmlFor="bondType">
               Bond category
@@ -221,6 +251,7 @@ function Home() {
             </button>
           </div>
         </form>
+        </div>
 
         {error && (
           <div className="bm-error">
@@ -277,25 +308,70 @@ function Home() {
       </section>
 
       {/* Extra sections */}
-      <section className="bm-sections">
+      <section
+        className="bm-sections"
+        style={{ marginTop: '3.5rem' }}
+      >
         <HowItWorksSection />
         <ExampleFileFormat />
       </section>
 
       {/* About on main page, above footer */}
-      <section id="about" className="bm-about">
-        <h1>About BondMatch</h1>
-        <p>
-          BondMatch is a simple tool that helps you quickly check whether your
-          government prize bonds have won in the latest draw. Upload a plain
-          text file with one bond number per line, choose the correct bond
-          category, and let BondMatch do the rest.
-        </p>
-        <p>
-          Our goal is to make prize bond checking fast, transparent, and
-          accessible for everyone &mdash; no spreadsheets, no manual searching,
-          and no technical steps required.
-        </p>
+      <section
+        id="about"
+        className="bm-about"
+        style={{ marginTop: '3.5rem' }}
+      >
+        {/* CTA Section above footer */}
+        <section
+          className="bm-cta"
+          style={{
+            marginTop: "3.5rem",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              background: "linear-gradient(90deg, #2f6df6, #1fbf73)",
+              borderRadius: "14px",
+              padding: "3rem 2rem",
+              textAlign: "center",
+              color: "white",
+              maxWidth: "900px",
+              width: "100%",
+            }}
+          >
+            <h2 style={{ fontSize: "1.9rem", marginBottom: "0.7rem" }}>
+              Ready to Check Your Bonds?
+            </h2>
+        
+            <p style={{ opacity: 0.9, marginBottom: "1.8rem" }}>
+              Join thousands of users who trust BondMatch for their prize bond
+              checking needs.
+            </p>
+        
+            <button
+              style={{
+                background: "white",
+                color: "#2563eb",
+                border: "none",
+                padding: "0.8rem 1.6rem",
+                borderRadius: "10px",
+                fontWeight: "600",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                const el = document.getElementById('bondmatch-tool');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
+              Get Started Now
+            </button >
+          </div>
+        </section>
       </section>
     </div>
   );

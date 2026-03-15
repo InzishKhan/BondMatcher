@@ -1,14 +1,14 @@
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import logging
 import asyncio
 from functools import partial
 from scraper import scrape_latest_bond_draws
-import os
+
 os.makedirs("uploads", exist_ok=True)
+
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -23,7 +23,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.mount("/", StaticFiles(directory="build", html=True), name="static")
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

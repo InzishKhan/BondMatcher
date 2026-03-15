@@ -6,7 +6,8 @@ import logging
 import asyncio
 from functools import partial
 from scraper import scrape_latest_bond_draws
-
+import os
+os.makedirs("uploads", exist_ok=True)
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -142,4 +143,6 @@ async def upload_file(file: UploadFile = File(...), bondType: str = Form(...)):
 
 if __name__ == '__main__':
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 8000))
+
+    uvicorn.run(app, host="0.0.0.0", port=port)

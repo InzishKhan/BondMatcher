@@ -24,7 +24,10 @@ def scrape_latest_bond_draws(bond_type):
     try:
         with sync_playwright() as p:
             logger.info("Playwright browser launching...")
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(
+                headless=True,
+                args=["--no-sandbox", "--disable-dev-shm-usage"]
+            )
             logger.info("Playwright browser launched successfully")
             page = browser.new_page()
             logger.info("New page created")

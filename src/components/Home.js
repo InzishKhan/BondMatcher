@@ -52,7 +52,7 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!bondName) {
       setError('Please select a bond type');
       return;
@@ -73,7 +73,7 @@ function Home() {
     formData.append('bondType', bondName);
 
     try {
-      const response = await fetch('https://bondmatcher-production.up.railway.app/api/upload', {
+      const response = await fetch('bond-matcher-git-deployment-inzishkhans-projects.vercel.app/api/upload', {
         method: 'POST',
         body: formData
       });
@@ -195,63 +195,63 @@ function Home() {
             border: '1px solid rgba(148, 163, 184, 0.55)',
           }}
         >
-        <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
-          <div className="bm-field-group">
-            <label className="bm-label" htmlFor="bondType">
-              Bond category
-            </label>
-            <select
-              id="bondType"
-              value={bondName}
-              onChange={(e) => setBondName(e.target.value)}
-              className="bm-select"
-              disabled={loading}
-            >
-              <option value="">Select bond category</option>
-              <option value="100">Rs. 100</option>
-              <option value="200">Rs. 200</option>
-              <option value="750">Rs. 750</option>
-              <option value="1500">Rs. 1500</option>
-            </select>
-          </div>
-
-          <div className="bm-field-group">
-            <label className="bm-label">
-              Bond list (.txt)
-            </label>
-            <div
-              className={`bm-dropzone ${isDragActive ? 'bm-dropzone--active' : ''}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <div className="bm-dropzone-title">Drag &amp; drop your .txt file here</div>
-              <div className="bm-dropzone-sub">or click below to browse from your computer</div>
-              <input
-                className="bm-file-input"
-                type="file"
-                accept=".txt"
-                onChange={handleFileChange}
+          <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
+            <div className="bm-field-group">
+              <label className="bm-label" htmlFor="bondType">
+                Bond category
+              </label>
+              <select
+                id="bondType"
+                value={bondName}
+                onChange={(e) => setBondName(e.target.value)}
+                className="bm-select"
                 disabled={loading}
-              />
-              {file && (
-                <div className="bm-file-name">
-                  Selected file: <strong>{file.name}</strong>
-                </div>
-              )}
+              >
+                <option value="">Select bond category</option>
+                <option value="100">Rs. 100</option>
+                <option value="200">Rs. 200</option>
+                <option value="750">Rs. 750</option>
+                <option value="1500">Rs. 1500</option>
+              </select>
             </div>
-          </div>
 
-          <div className="bm-tool-actions">
-            <button
-              type="submit"
-              className="bm-primary-btn"
-              disabled={loading}
-            >
-              {loading ? 'Checking bonds…' : 'Check Bonds'}
-            </button>
-          </div>
-        </form>
+            <div className="bm-field-group">
+              <label className="bm-label">
+                Bond list (.txt)
+              </label>
+              <div
+                className={`bm-dropzone ${isDragActive ? 'bm-dropzone--active' : ''}`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                <div className="bm-dropzone-title">Drag &amp; drop your .txt file here</div>
+                <div className="bm-dropzone-sub">or click below to browse from your computer</div>
+                <input
+                  className="bm-file-input"
+                  type="file"
+                  accept=".txt"
+                  onChange={handleFileChange}
+                  disabled={loading}
+                />
+                {file && (
+                  <div className="bm-file-name">
+                    Selected file: <strong>{file.name}</strong>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="bm-tool-actions">
+              <button
+                type="submit"
+                className="bm-primary-btn"
+                disabled={loading}
+              >
+                {loading ? 'Checking bonds…' : 'Check Bonds'}
+              </button>
+            </div>
+          </form>
         </div>
 
         {error && (
@@ -362,12 +362,12 @@ function Home() {
             <h2 style={{ fontSize: "1.9rem", marginBottom: "0.7rem" }}>
               Ready to Check Your Bonds?
             </h2>
-        
+
             <p style={{ opacity: 0.9, marginBottom: "1.8rem" }}>
               Join thousands of users who trust BondMatch for their prize bond
               checking needs.
             </p>
-        
+
             <button
               style={{
                 background: "white",

@@ -1,0 +1,44 @@
+[variables]
+PLAYWRIGHT_BROWSERS_PATH = "0"
+
+[phases.setup]
+nixPkgs = [
+  "chromium",
+  "nss",
+  "at-spi2-core",
+  "cups",
+  "xorg.libxcb",
+  "xorg.libX11",
+  "xorg.libXcomposite",
+  "xorg.libXdamage",
+  "xorg.libXext",
+  "xorg.libXfixes",
+  "xorg.libXrandr",
+  "xorg.libxkbcommon",
+  "gtk3",
+  "pango",
+  "cairo",
+  "glib",
+  "alsa-lib",
+  "expat",
+  "xorg.libXcursor",
+  "xorg.libXi",
+  "xorg.libXrender",
+  "xorg.libXtst",
+  "at-spi2-atk",
+  "libdrm",
+  "mesa",
+  "nspr",
+  "dbus",
+  "fontconfig",
+  "freetype",
+]
+
+[phases.install]
+cmds = [
+  "pip install -r requirements.txt",
+  "playwright install chromium",
+]
+
+[start]
+cmd = "uvicorn app:app --host 0.0.0.0 --port $PORT"

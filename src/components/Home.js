@@ -73,7 +73,7 @@ function Home() {
     formData.append('bondType', bondName);
 
     try {
-      const response = await fetch('bond-matcher-git-deployment-inzishkhans-projects.vercel.app/api/upload', {
+      const response = await fetch('https://bondmatcher-production.up.railway.app/api/upload', {
         method: 'POST',
         body: formData
       });

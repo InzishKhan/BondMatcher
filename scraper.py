@@ -124,7 +124,7 @@ def scrape_latest_bond_draws(bond_type):
                 current_section = "second_prize"
                 continue
 
-            if "3rd PRIZES" in line:
+            if "Third Prize" in line:
                 current_section = "third_prize"
                 continue
 
